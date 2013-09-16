@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+if Dir.exists?('.git') #|| system('git rev-parse')!='false'
+  x=`git status -sb`
+  x.match(/\[(.*)\]/)
+  puts $1
+else
+  puts "<not git>"
+end
