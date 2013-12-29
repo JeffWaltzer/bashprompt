@@ -40,7 +40,7 @@ def color_reset
 end
 
 def blink(mode=:on)
-  "\e[#{mode==:on ? 5 : 0}m"
+  "\e[#{mode==:on ? "5" : "0"}m"
 end
 
 def show_stash
