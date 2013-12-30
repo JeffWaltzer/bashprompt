@@ -45,7 +45,7 @@ end
 
 def show_stash
   count = `git stash list | wc -l`
-  (count.to_i > 0) ? "#{color :light_red, :blink}{Stash: #{count.strip}}#{color :green}" : ''
+  (count.to_i > 0) ? "#{color :light_cyan, :blink}{Stash: #{count.strip}}#{color :green}" : ''
 end
 
 def show_status
