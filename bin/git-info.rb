@@ -74,8 +74,11 @@ if Dir.exists?('.git')
            show_files,
            show_stash,
            show_branch,
-         ].join(' ').squeeze +
-         color_reset
+         ].
+             join(' ').
+             gsub('/', '//').
+             squeeze +
+           color_reset
 else
   puts show_rvm.chomp
 end
