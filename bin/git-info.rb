@@ -80,5 +80,5 @@ if Dir.exists?('.git')
              squeeze +
            color_reset
 else
-  puts show_rvm.chomp
+  puts "#{color(:light_green)}#{show_rvm.chomp}#{color_reset}"
 end
