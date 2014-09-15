@@ -66,7 +66,7 @@ def show_branch
   "#{color :light_blue}(#{`git rev-parse --abbrev-ref HEAD`.strip})#{color :green}"
 end
 
-if File.exists?('.git')
+if Dir.exists?('.git')
   puts color(:green) +
          [
            show_rvm,
@@ -80,5 +80,5 @@ if File.exists?('.git')
              squeeze +
            color_reset
 else
-  puts "#{color(:light_green)}#{show_rvm.chomp}#{color_reset}"
+  puts show_rvm.chomp
 end
