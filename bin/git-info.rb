@@ -66,7 +66,8 @@ def show_branch
   "#{color :light_blue}(#{`git rev-parse --abbrev-ref HEAD`.strip})#{color :green}"
 end
 
-if File.exists?('.git')
+
+if system('git rev-parse 2> /dev/null > /dev/null') 
   puts color(:green) +
          [
            show_rvm,
