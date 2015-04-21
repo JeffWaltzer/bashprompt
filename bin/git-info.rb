@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/opt/puppet/bin/ruby
 
 COLORS = {
   :black => 30,
