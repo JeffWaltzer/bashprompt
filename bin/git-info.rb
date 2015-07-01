@@ -76,9 +76,8 @@ if system('git rev-parse 2> /dev/null > /dev/null')
            show_branch,
          ].
              join(' ').
-             gsub('/', '//').
-             squeeze +
-           color_reset
+             gsub('/', '//') +
+          color_reset
 else
   puts "#{color(:light_green)}#{show_rvm.chomp}#{color_reset}"
 end
