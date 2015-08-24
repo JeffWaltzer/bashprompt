@@ -50,7 +50,7 @@ end
 
 def show_status
   s=`git status -s | cut -c-2 | sort | uniq -c | tr "\\n" ":" | tr -s " "`
-  s.size==0 ? '' : "(#{color :light_yellow}#{s.strip}#{color :green})"
+  s.size==0 ? '' : "(#{color :magenta}#{s.strip}#{color :green})"
 end
 
 def show_files
@@ -58,26 +58,39 @@ def show_files
   gitstatussb_match && gitstatussb_match[0]
 end
 
-def show_rvm
-  `ruby --version`.strip
+def show_ruby_version
+  `ruby --version`.split[1]
 end
 
 def show_branch
   "#{color :light_blue}(#{`git rev-parse --abbrev-ref HEAD`.strip})#{color :green}"
 end
 
+def master_diff(branch='')
+  remote_changed = `git diff master #{branch} --name-only | wc -l`.strip
+end
+
+def show_master_diff
+  files_changed = master_diff
+  remote_changed = master_diff('origin/master')
+  "#{color(:red)}#{files_changed}:#{remote_changed}#{color(:green)}"
+end
+
 if system('git rev-parse 2> /dev/null > /dev/null')
   puts color(:green) +
          [
-           show_rvm,
+           show_ruby_version,
            show_status,
+           show_master_diff,
            show_files,
            show_stash,
            show_branch,
          ].
              join(' ').
+             gsub('   ', ' ').
+             gsub('  ', ' ').
              gsub('/', '//') +
           color_reset
 else
-  puts "#{color(:light_green)}#{show_rvm.chomp}#{color_reset}"
+  puts "no git #{color(:light_green)}ruby #{show_ruby_version}#{color_reset}"
 end
