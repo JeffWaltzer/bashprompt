@@ -66,14 +66,19 @@ def show_branch
   "#{color :light_blue}(#{`git rev-parse --abbrev-ref HEAD`.strip})#{color :green}"
 end
 
-def master_diff(branch='')
-  remote_changed = `git diff master #{branch} --name-only | wc -l`.strip
+def master_diff(branch='', parent = 'master')
+  remote_changed = `git diff #{parent} #{branch} --name-only | wc -l`.strip
 end
 
 def show_master_diff
   files_changed = master_diff
-  remote_changed = master_diff('origin/master')
-  "#{color(:red)}#{files_changed}:#{remote_changed}#{color(:green)}"
+  "#{color(:red)}#{files_changed}#{color(:green)}"
+end
+
+
+def show_parent_diff
+  files_changed = master_diff('', '@{u}')
+  "\{#{color(:red)}#{files_changed}#{color(:green)}\}"
 end
 
 if system('git rev-parse 2> /dev/null > /dev/null')
@@ -82,6 +87,7 @@ if system('git rev-parse 2> /dev/null > /dev/null')
            show_ruby_version,
            show_status,
            show_master_diff,
+           show_parent_diff,
            show_files,
            show_stash,
            show_branch,
@@ -89,7 +95,7 @@ if system('git rev-parse 2> /dev/null > /dev/null')
              join(' ').
              gsub('   ', ' ').
              gsub('  ', ' ').
-             gsub('/', '//') +
+             gsub('/', '/') +
           color_reset
 else
   puts "no git #{color(:light_green)}ruby #{show_ruby_version}#{color_reset}"
