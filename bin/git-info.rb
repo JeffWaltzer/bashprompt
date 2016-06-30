@@ -49,8 +49,8 @@ def show_stash
 end
 
 def show_status
-  s=`git status -s | cut -c-2 | sort | uniq -c | tr "\\n" ":" | tr -s " "`
-  s.size==0 ? '' : "(#{color :magenta}#{s.strip}#{color :green})"
+  s=`git status -s | cut -c-2 | sort | uniq -c | tr "\\n" ":" | tr -s " "`.strip
+  s.size==0 ? '' : "(#{color :magenta}#{s.strip}#{color :green})".strip
 end
 
 def show_files
@@ -63,7 +63,7 @@ def show_ruby_version
 end
 
 def show_branch
-  "#{color :light_blue}(#{`git rev-parse --abbrev-ref HEAD`.strip})#{color :green}"
+  "#{color :light_blue}#{`git rev-parse --abbrev-ref HEAD`.strip}#{color :green}"
 end
 
 def master_diff(branch='', parent = 'master')
@@ -71,32 +71,36 @@ def master_diff(branch='', parent = 'master')
 end
 
 def show_master_diff
-  files_changed = master_diff
-  "#{color(:red)}#{files_changed}#{color(:green)}"
+  files_changed = master_diff.to_i
+  if files_changed
+    "#{color(:red)}#{files_changed}#{color(:green)}"
+  end
 end
 
 
 def show_parent_diff
-  files_changed = master_diff('', '@{u}')
-  "\{#{color(:red)}#{files_changed}#{color(:green)}\}"
+  files_changed = master_diff('', '@{u}').to_i
+  if files_changed>0
+    "\{#{color(:red)}#{files_changed}#{color(:green)}\}"
+  end
 end
 
 if system('git rev-parse 2> /dev/null > /dev/null')
   puts color(:green) +
          [
-           show_ruby_version,
-           show_status,
+           # show_ruby_version,
            show_master_diff,
            show_parent_diff,
-           show_files,
-           show_stash,
            show_branch,
+           show_files,
+           show_status,
+           show_stash,
+            ' ' 
          ].
              join(' ').
              gsub('   ', ' ').
-             gsub('  ', ' ').
-             gsub('/', '/') +
+             gsub('  ', ' ')+
           color_reset
 else
-  puts "no git #{color(:light_green)}ruby #{show_ruby_version}#{color_reset}"
+  puts "#{color(:light_green)}ruby #{show_ruby_version}#{color_reset} "
 end
