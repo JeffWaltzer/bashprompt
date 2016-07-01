@@ -67,7 +67,7 @@ def show_branch
 end
 
 def master_diff(branch='', parent = 'master')
-  remote_changed = `git diff #{parent} #{branch} --name-only | wc -l`.strip
+  remote_changed = `git diff #{parent} #{branch} --name-only  2> /dev/null | wc -l`.strip
 end
 
 def show_master_diff
@@ -85,6 +85,12 @@ def show_parent_diff
   end
 end
 
+def have_upstream
+    `git rev-parse --symbolic-full-name HEAD@{u} 2> /dev/null` != ''  ?
+         ' ' :
+         "#{color(:red, :blink)}no upsream#{color(:green)}"
+end
+
 if system('git rev-parse 2> /dev/null > /dev/null')
   puts color(:green) +
          [
@@ -95,6 +101,7 @@ if system('git rev-parse 2> /dev/null > /dev/null')
            show_files,
            show_status,
            show_stash,
+             have_upstream,
             ' ' 
          ].
              join(' ').
