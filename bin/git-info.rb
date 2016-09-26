@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+require 'net/http'
+
 COLORS = {
   :black => 30,
   :red => 31,
@@ -85,6 +87,23 @@ def show_parent_diff
   end
 end
 
+
+def show_host
+    `curl -sS -m 0.3 http://jeffwaltzer.com/hostname.rhtml 2>/dev/null `.strip
+#     begin
+#         host='jeffwaltzer.com'
+#         port = 80
+# 
+#         http = Net::HTTP.new(host, port)
+#         http.read_timeout = 0.2
+# 
+#         http.get('/hostname.rhtml').body.strip
+#     rescue Error => e
+#         return e
+#     end
+end
+
+
 def have_upstream
     `git rev-parse --symbolic-full-name HEAD@{u} 2> /dev/null` != ''  ?
          ' ' :
@@ -109,5 +128,5 @@ if system('git rev-parse 2> /dev/null > /dev/null')
              gsub('  ', ' ')+
           color_reset
 else
-  puts "#{color(:light_green)}ruby #{show_ruby_version}#{color_reset} "
+  puts "#{color(:light_green)}ruby #{show_ruby_version}#{color(:light_red)} #{show_host}#{color_reset} ".gsub(/ +/,' ')
 end
