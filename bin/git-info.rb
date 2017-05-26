@@ -68,14 +68,22 @@ def show_branch
   "#{color :light_blue}#{`git rev-parse --abbrev-ref HEAD`.strip}#{color :green}"
 end
 
-def master_diff(branch='', parent = 'master')
+def master_diff(branch='', parent = 'origin/master')
   remote_changed = `git diff #{parent} #{branch} --name-only  2> /dev/null | wc -l`.strip
 end
 
 def show_master_diff
   files_changed = master_diff.to_i
   if files_changed
-    "#{color(:red)}#{files_changed}#{color(:green)}"
+    "#{color(:white)}#{files_changed}m#{color(:green)}"
+  end
+end
+
+
+def show_dev_diff
+  files_changed = master_diff('','develop_main').to_i
+  if files_changed
+    "#{color(:red)}#{files_changed}d#{color(:green)}"
   end
 end
 
@@ -83,7 +91,7 @@ end
 def show_parent_diff
   files_changed = master_diff('', '@{u}').to_i
   if files_changed>0
-    "\{#{color(:red)}#{files_changed}#{color(:green)}\}"
+    "#{color(:red)}#{files_changed}p#{color(:green)}"
   end
 end
 
@@ -116,6 +124,7 @@ if system('git rev-parse 2> /dev/null > /dev/null')
            # show_ruby_version,
            show_master_diff,
            show_parent_diff,
+           show_dev_diff,
            show_branch,
            show_files,
            show_status,
