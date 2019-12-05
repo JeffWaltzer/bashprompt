@@ -101,7 +101,7 @@ end
 
 def show_ip
   begin
-    Timeout::timeout(1) do
+    Timeout::timeout(2) do
       url = 'https://api6.ipify.org?format=json'
       uri = URI(url)
       response = Net::HTTP.get(uri)
