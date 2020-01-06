@@ -145,6 +145,6 @@ if system('git rev-parse 2> /dev/null > /dev/null')
                gsub('   ', ' ').
                gsub('  ', ' ') +
            color_reset
-else
-  puts "#{color(:light_red)}#{show_host} #{show_ip}  #{color(:light_green)} #{show_ruby_version}#{color(:light_green)} #{Dir.pwd} #{color_reset} ".gsub(/ +/, ' ').strip
+else 
+  puts "#{color(:light_red)}#{show_host} #{show_ip}  #{color(:light_green)}ruby #{show_ruby_version}#{color(:light_green)} #{Dir.pwd} #{color_reset} ".gsub(/ +/, ' ').strip
 end
