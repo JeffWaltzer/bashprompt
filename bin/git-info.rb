@@ -64,7 +64,8 @@ def show_files
 end
 
 def show_ruby_version
-  `ruby --version`.split[1]
+    `rvm-prompt`.strip
+    #`ruby --version`.split[1]
 end
 
 def show_branch
@@ -129,7 +130,6 @@ if system('git rev-parse 2> /dev/null > /dev/null')
                show_host,
                show_ip,
                color(:light_green),
-               'ruby',
                show_ruby_version,
                show_master_diff,
                show_parent_diff,
@@ -145,6 +145,6 @@ if system('git rev-parse 2> /dev/null > /dev/null')
                gsub('   ', ' ').
                gsub('  ', ' ') +
            color_reset
-else
+else 
   puts "#{color(:light_red)}#{show_host} #{show_ip}  #{color(:light_green)}ruby #{show_ruby_version}#{color(:light_green)} #{Dir.pwd} #{color_reset} ".gsub(/ +/, ' ').strip
 end
