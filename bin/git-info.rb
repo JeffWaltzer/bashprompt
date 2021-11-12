@@ -103,7 +103,7 @@ end
 def show_ip
   begin
     Timeout::timeout(2) do
-      url = 'https://api6.ipify.org?format=json'
+      url = 'http://api.ipify.org?format=json'
       uri = URI(url)
       response = Net::HTTP.get(uri)
       JSON.parse(response)['ip']
