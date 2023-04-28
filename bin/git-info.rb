@@ -64,8 +64,8 @@ def show_files
 end
 
 def show_ruby_version
-    `rvm-prompt`.strip
-    #`ruby --version`.split[1]
+    #`rvm-prompt`.strip
+    `ruby --version`.split[1]
 end
 
 def show_branch
@@ -102,14 +102,16 @@ end
 
 def show_ip
   begin
-    Timeout::timeout(2) do
+    Timeout::timeout(1) do
       url = 'http://api.ipify.org?format=json'
       uri = URI(url)
       response = Net::HTTP.get(uri)
       JSON.parse(response)['ip']
     end
   rescue Timeout::Error => e
-    "[#{e.message}]"
+    "[showip timeout]"
+  rescue => e
+    "[Show_ip:#{e.class.name} #{e.message}]"
   end
 end
 
@@ -127,7 +129,7 @@ end
 if system('git rev-parse 2> /dev/null > /dev/null')
   puts color(:light_red) +
            [
-               show_host,
+               #show_host,
                show_ip,
                color(:light_green),
                show_ruby_version,
@@ -139,12 +141,12 @@ if system('git rev-parse 2> /dev/null > /dev/null')
                show_status,
                show_stash,
                have_upstream,
-               Dir.pwd
+               #Dir.pwd
            ].
                join(' ').
                gsub('   ', ' ').
                gsub('  ', ' ') +
            color_reset
 else 
-  puts "#{color(:light_red)}#{show_host} #{show_ip}  #{color(:light_green)}ruby #{show_ruby_version}#{color(:light_green)} #{Dir.pwd} #{color_reset} ".gsub(/ +/, ' ').strip
+  puts "#{color(:light_red)}#{show_ip} #{color(:light_green)}ruby #{show_ruby_version}#{color(:light_green)} #{Dir.pwd} #{color_reset} ".gsub(/ +/, ' ').strip
 end
